@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Study Buddy Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero">
+        <h1>Sentiment Aware Study Buddy</h1>
+        <p>Enter how you're feeling about your studies and get adaptive guidance instantly.</p>
+      </section>
+
+      <section class="card form-card">
+        <label for="topic">Study topic</label>
+        <input id="topic" type="text" placeholder="e.g. calculus" value="calculus" />
+
+        <label for="message">Your message</label>
+        <textarea id="message" rows="4" placeholder="I feel stuck on derivatives..."></textarea>
+
+        <button id="submit">Analyze sentiment</button>
+        <div id="error" class="error-message"></div>
+      </section>
+
+      <section id="result" class="card result-card hidden">
+        <h2>Response</h2>
+        <div class="result-grid">
+          <div>
+            <strong>Sentiment</strong>
+            <p id="sentiment-label"></p>
+          </div>
+          <div>
+            <strong>Compound score</strong>
+            <p id="compound-score"></p>
+          </div>
+          <div>
+            <strong>Tone</strong>
+            <p id="tone"></p>
+          </div>
+        </div>
+
+        <div class="response-block">
+          <p id="opening" class="opening"></p>
+          <p id="guidance" class="guidance"></p>
+          <p id="suggestion" class="suggestion"></p>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const submitButton = document.getElementById('submit');
+      const errorBox = document.getElementById('error');
+      const resultSection = document.getElementById('result');
+
+      async function analyze() {
+        errorBox.textContent = '';
+        resultSection.classList.add('hidden');
+
+        const message = document.getElementById('message').value.trim();
+        const topic = document.getElementById('topic').value.trim() || 'your topic';
+
+        if (!message) {
+          errorBox.textContent = 'Please type a message before sending.';
+          return;
+        }
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Analyzing...';
+
+        try {
+          const response = await fetch('/api/respond', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message, topic }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            errorBox.textContent = data.error || 'Unable to analyze sentiment.';
+            return;
+          }
+
+          document.getElementById('sentiment-label').textContent = data.sentiment.label;
+          document.getElementById('compound-score').textContent = data.sentiment.compound_score.toFixed(2);
+          document.getElementById('tone').textContent = data.response.tone;
+          document.getElementById('opening').textContent = data.response.opening;
+          document.getElementById('guidance').textContent = data.response.guidance;
+          document.getElementById('suggestion').textContent = `Next step: ${data.response.suggestion}`;
+          resultSection.classList.remove('hidden');
+        } catch (error) {
+          errorBox.textContent = 'Network error. Please try again.';
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = 'Analyze sentiment';
+        }
+      }
+
+      submitButton.addEventListener('click', analyze);
+      document.getElementById('message').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && (event.ctrlKey || event.metaKey)) {
+          analyze();
+        }
+      });
+    </script>
+  </body>
+</html>

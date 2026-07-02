@@ -1,0 +1,134 @@
+:root {
+  color-scheme: dark;
+  color: #0f172a;
+  background: #f8fafc;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(circle at top, #dbeafe 0%, #f8fafc 40%, #f1f5f9 100%);
+}
+
+.page-shell {
+  width: min(100%, 880px);
+  display: grid;
+  gap: 1.5rem;
+}
+
+.hero {
+  padding: 2rem;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+}
+
+.hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 2.5vw, 3rem);
+}
+
+.hero p {
+  margin: 0;
+  line-height: 1.75;
+  color: #475569;
+}
+
+.card {
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);
+}
+
+.form-card label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.form-card input,
+.form-card textarea {
+  width: 100%;
+  padding: 0.95rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.85rem;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.form-card input:focus,
+.form-card textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+button {
+  border: none;
+  border-radius: 0.85rem;
+  background: #2563eb;
+  color: white;
+  padding: 0.95rem 1.25rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #b91c1c;
+  margin-top: 0.75rem;
+  min-height: 1.25rem;
+}
+
+.result-card.hidden {
+  display: none;
+}
+
+.result-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  margin-bottom: 1.25rem;
+}
+
+.result-grid strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: #334155;
+}
+
+.response-block p {
+  margin: 0.85rem 0;
+  line-height: 1.75;
+  color: #1e293b;
+}
+
+.opening {
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 1rem;
+  }
+}
